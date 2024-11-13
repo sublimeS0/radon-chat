@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "radon-chat",
+  "version": "${version}",
+
+  "name": "Radon Chat",
+  "description": "Improved chat readability, specifically designed for large servers.",
+  "authors": [
+    "sublimeS0",
+    "caup"
+  ],
+  "contact": {
+    "discord": "sublimeS0#6295"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/radon-chat/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.sublimeS0.radonchat.RadonChat"
+    ]
+  },
+  "mixins": [
+    "radonchat.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "fabric-api": "*",
+    "minecraft": "~1.19.4",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
