@@ -18,6 +18,9 @@
 	"entrypoints": {
 		"main": [
 			"com.radonchat.RadonChat"
+		],
+		"client": [
+			"com.radonchat.RadonChatClient"
 		]
 	},
 	"mixins": [
