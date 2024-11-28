@@ -9,8 +9,7 @@
         "caup"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/sublimeS0/radon-chat"
 	},
 	"license": "GPL-3.0",
 	"icon": "assets/radon-chat/icon.png",
