@@ -1,17 +1,21 @@
 package com.radonchat;
 
-import com.mojang.brigadier.Message;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.hud.MessageIndicator;
-import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 public class RadonChatClient implements ClientModInitializer {
 
@@ -50,12 +54,20 @@ public class RadonChatClient implements ClientModInitializer {
 	 * @return
 	 */
 	private Text styleNameInMessage(Text message) {
-		final Style initStyle = message.getStyle();
-		final Style nameStyle = message.getStyle().withColor(TextColor.parse("#2030FE").getOrThrow());
-
+		Style initStyle = message.getStyle();
 		final String messageString = message.getString();
 
 		final String senderName = messageString.substring(messageString.indexOf("<") + 1, messageString.indexOf(">"));
+
+		Style nameStyle = initStyle;
+
+        try {
+			nameStyle = getNameStyle(senderName, initStyle);
+		}
+		catch(FileNotFoundException e) {
+			// man IDC
+		}
+
 
 		final Text pre = Text.empty().setStyle(initStyle).append("<");
 		final Text styledName = Text.empty().setStyle(nameStyle).append(senderName);
@@ -72,5 +84,38 @@ public class RadonChatClient implements ClientModInitializer {
 	 */
 	private boolean isMessageFromPlayer(String message) {
 		return message.contains("<") && message.contains(">");
+	}
+
+	/**
+	 *
+	 * TODO: break into two methods
+	 *
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	private Style getNameStyle(String senderName, Style initStyle) throws FileNotFoundException {
+		JsonParser parser = new JsonParser();
+
+		Object o = parser.parse(new FileReader("C:\\groups.json"));
+		JsonObject obj = (JsonObject) o;
+
+		JsonArray groups = obj.getAsJsonArray("groups");
+
+		for (JsonElement group: groups) {
+			JsonObject groupObject = (JsonObject) group;
+
+			Style groupColor = initStyle.withColor(TextColor.parse(groupObject.get("color").getAsString()).getOrThrow());
+
+			JsonArray members = groupObject.getAsJsonArray("members");
+
+			for(int i = 0; i < members.size(); i++) {
+				// if(members.get(i).getAsString().equals(senderName)) {
+				if(senderName.contains(members.get(i).getAsString())) {
+					return groupColor;
+				}
+			}
+		}
+
+		return initStyle;
 	}
 }
