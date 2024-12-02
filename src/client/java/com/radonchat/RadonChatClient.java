@@ -31,9 +31,18 @@ public class RadonChatClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		LOGGER.info("Initializing radon-chat client...");
 
+		JsonObject groupConfig = null;
+		try {
+			groupConfig = (JsonObject) JsonParser.parseReader(new FileReader("C:\\groups.json"));
+		} catch (FileNotFoundException e) {
+			LOGGER.error("Unable to find `C:\\groups.json`.");
+			return;
+		}
+		final JsonObject finalGroupConfig = groupConfig;
+
 		// Register to basic chat messages
 		ClientReceiveMessageEvents.ALLOW_CHAT.register((message, signedMessage, sender, params, receptionTimestamp) -> {
-			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(styleNameInMessage(message));
+			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(styleNameInMessage(message, finalGroupConfig));
 			return false; // Block original message in favor of styled
 		});
 
@@ -43,7 +52,7 @@ public class RadonChatClient implements ClientModInitializer {
 				return true;
 			}
 
-			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(styleNameInMessage(message));
+			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(styleNameInMessage(message, finalGroupConfig));
 			return false;
 		});
 	}
@@ -51,9 +60,10 @@ public class RadonChatClient implements ClientModInitializer {
 	/**
 	 *
 	 * @param message
-	 * @return
+	 * @param groupConfig
+	 * @return Text - Styled chat message to display to user via `ChatHud.addLine()`
 	 */
-	private Text styleNameInMessage(Text message) {
+	private Text styleNameInMessage(Text message, JsonObject groupConfig) {
 		Style initStyle = message.getStyle();
 		final String messageString = message.getString();
 
@@ -61,12 +71,7 @@ public class RadonChatClient implements ClientModInitializer {
 
 		Style nameStyle = initStyle;
 
-        try {
-			nameStyle = getNameStyle(senderName, initStyle);
-		}
-		catch(FileNotFoundException e) {
-			// man IDC
-		}
+		nameStyle = getNameStyle(senderName, initStyle, groupConfig);
 
 
 		final Text pre = Text.empty().setStyle(initStyle).append("<");
@@ -90,16 +95,10 @@ public class RadonChatClient implements ClientModInitializer {
 	 *
 	 * TODO: break into two methods
 	 *
-	 * @return
-	 * @throws FileNotFoundException
+	 * @return Style - Style to apply to name portion of chat message
 	 */
-	private Style getNameStyle(String senderName, Style initStyle) throws FileNotFoundException {
-		JsonParser parser = new JsonParser();
-
-		Object o = parser.parse(new FileReader("C:\\groups.json"));
-		JsonObject obj = (JsonObject) o;
-
-		JsonArray groups = obj.getAsJsonArray("groups");
+	private Style getNameStyle(String senderName, Style initStyle, JsonObject groupConfig) {
+		JsonArray groups = groupConfig.getAsJsonArray("groups");
 
 		for (JsonElement group: groups) {
 			JsonObject groupObject = (JsonObject) group;
