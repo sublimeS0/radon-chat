@@ -5,8 +5,7 @@
 	"name": "Radon Chat",
 	"description": "A lightweight chat mod designed to improve readability on larger servers.",
 	"authors": [
-		"sublimeS0",
-        "caup"
+		"sublimeS0"
 	],
 	"contact": {
 		"sources": "https://github.com/sublimeS0/radon-chat"
@@ -20,6 +19,9 @@
 		],
 		"client": [
 			"com.radonchat.RadonChatClient"
+		],
+		"modmenu": [
+			"com.radonchat.config.ModMenuIntegration"
 		]
 	},
 	"mixins": [

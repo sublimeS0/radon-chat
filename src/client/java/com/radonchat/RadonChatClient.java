@@ -4,22 +4,38 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.radonchat.config.ModConfig;
+import com.terraformersmc.modmenu.api.ModMenuApi;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-public class RadonChatClient implements ClientModInitializer {
+public class RadonChatClient implements ClientModInitializer, ModMenuApi {
 
 	public static final String MOD_ID = "radon-chat";
+
+	private static ConfigHolder<ModConfig> configHolder;
+	private ModConfig config;
+
+	public static ModConfig getConfig() {
+		return configHolder.getConfig();
+	}
+
+	public static void saveConfig(){
+		configHolder.save();
+	}
+
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
@@ -31,11 +47,14 @@ public class RadonChatClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		LOGGER.info("Initializing radon-chat client...");
 
+		configHolder = AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
+		config = getConfig();
+
 		JsonObject groupConfig = null;
 		try {
-			groupConfig = (JsonObject) JsonParser.parseReader(new FileReader("C:\\groups.json"));
+			groupConfig = (JsonObject) JsonParser.parseReader(new FileReader(config.radonChatSettings.getFilePath()));
 		} catch (FileNotFoundException e) {
-			LOGGER.error("Unable to find `C:\\groups.json`.");
+			LOGGER.error("Unable to find " + config.radonChatSettings.getFilePath() + ".");
 			return;
 		}
 		final JsonObject finalGroupConfig = groupConfig;
@@ -51,16 +70,16 @@ public class RadonChatClient implements ClientModInitializer {
 			if(!isMessageFromPlayer(message.getString())) {
 				return true;
 			}
-
 			MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(styleNameInMessage(message, finalGroupConfig));
 			return false;
 		});
 	}
 
 	/**
+	 * Colors player name in message according to group config file
 	 *
-	 * @param message
-	 * @param groupConfig
+	 * @param message Sent message
+	 * @param groupConfig Group configuration details
 	 * @return Text - Styled chat message to display to user via `ChatHud.addLine()`
 	 */
 	private Text styleNameInMessage(Text message, JsonObject groupConfig) {
@@ -108,8 +127,7 @@ public class RadonChatClient implements ClientModInitializer {
 			JsonArray members = groupObject.getAsJsonArray("members");
 
 			for(int i = 0; i < members.size(); i++) {
-				// if(members.get(i).getAsString().equals(senderName)) {
-				if(senderName.contains(members.get(i).getAsString())) {
+				 if(members.get(i).getAsString().equals(senderName)) {
 					return groupColor;
 				}
 			}
