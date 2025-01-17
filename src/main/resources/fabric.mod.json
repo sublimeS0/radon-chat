@@ -5,12 +5,10 @@
 	"name": "Radon Chat",
 	"description": "A lightweight chat mod designed to improve readability on larger servers.",
 	"authors": [
-		"sublimeS0",
-        "caup"
+		"sublimeS0"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/sublimeS0/radon-chat"
 	},
 	"license": "GPL-3.0",
 	"icon": "assets/radon-chat/icon.png",
@@ -21,6 +19,9 @@
 		],
 		"client": [
 			"com.radonchat.RadonChatClient"
+		],
+		"modmenu": [
+			"com.radonchat.config.ModMenuIntegration"
 		]
 	},
 	"mixins": [
