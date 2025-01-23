@@ -33,7 +33,7 @@ is optional and only used for personal organization.
 ```
 
 This file can be located anywhere, but by default it is 
-`C:\Users\<user>\AppData\Roaming\.minecraft\config\radon-chat_groups.json`. This can be changed in the mods in-game 
+`C:\Users\<user>\AppData\Roaming\.minecraft\config\radon-chat_groups.json`. This can be changed in the mod's in-game 
 config.
 
 ## License
