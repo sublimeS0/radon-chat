@@ -1,5 +1,8 @@
 package com.radonchat.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
@@ -11,27 +14,20 @@ public class ModConfig implements ConfigData {
     @Category("radonChatSettings")
     @ConfigEntry.Gui.TransitiveObject
     public RadonChatSettings radonChatSettings = new RadonChatSettings();
-
     public static class RadonChatSettings {
-
-        private String FILE_PATH = System.getenv("APPDATA") + "\\.minecraft\\config\\radon-chat_groups.json";
-
         /**
-         * Get group config file path
-         * @return System file path
+         * Create a class to store an object with all information in a group
          */
-        public String getFilePath() {
-            return FILE_PATH;
+        public static class Group {
+            public String name = "";
+            public String color = "#FFFFFF";
+            public List<String> players = new ArrayList<>();
         }
 
         /**
-         * Set group config file path
-         * @param FILE_PATH Name of file path
-         * @return this
+         * Create a list of groups that exist
          */
-        public RadonChatSettings setFilePath(String FILE_PATH) {
-            this.FILE_PATH = FILE_PATH;
-            return this;
-        }
+        @ConfigEntry.Gui.Tooltip
+        public List<Group> groups = new ArrayList<>();
     }
 }
