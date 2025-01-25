@@ -1,37 +1,41 @@
 package com.radonchat.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
 
+/**
+ * Holds mod config information for radon-chat
+ */
 @Config(name = "radon-chat")
 public class ModConfig implements ConfigData {
 
     @Category("radonChatSettings")
     @ConfigEntry.Gui.TransitiveObject
     public RadonChatSettings radonChatSettings = new RadonChatSettings();
-
     public static class RadonChatSettings {
 
-        private String FILE_PATH = System.getenv("APPDATA") + "\\.minecraft\\config\\radon-chat_groups.json";
-
         /**
-         * Get group config file path
-         * @return System file path
+         * Group config object
          */
-        public String getFilePath() {
-            return FILE_PATH;
+        public static class Group {
+            /** Group name, for organizational purposes */
+            public String name = "";
+
+            /** Color of names to be displayed in chat*/
+            public String color = "#FFFFFF";
+
+            /** List of player names that belong to this group */
+            public List<String> players = new ArrayList<>();
         }
 
         /**
-         * Set group config file path
-         * @param FILE_PATH Name of file path
-         * @return this
+         * List of Groups
          */
-        public RadonChatSettings setFilePath(String FILE_PATH) {
-            this.FILE_PATH = FILE_PATH;
-            return this;
-        }
+        public List<Group> groups = new ArrayList<>();
     }
 }
