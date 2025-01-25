@@ -8,6 +8,9 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
 
+/**
+ * Holds mod config information for radon-chat
+ */
 @Config(name = "radon-chat")
 public class ModConfig implements ConfigData {
 
@@ -15,19 +18,24 @@ public class ModConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public RadonChatSettings radonChatSettings = new RadonChatSettings();
     public static class RadonChatSettings {
+
         /**
-         * Create a class to store an object with all information in a group
+         * Group config object
          */
         public static class Group {
+            /** Group name, for organizational purposes */
             public String name = "";
+
+            /** Color of names to be displayed in chat*/
             public String color = "#FFFFFF";
+
+            /** List of player names that belong to this group */
             public List<String> players = new ArrayList<>();
         }
 
         /**
-         * Create a list of groups that exist
+         * List of Groups
          */
-        @ConfigEntry.Gui.Tooltip
         public List<Group> groups = new ArrayList<>();
     }
 }
