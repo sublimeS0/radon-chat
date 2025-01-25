@@ -7,6 +7,9 @@
 	"authors": [
 		"sublimeS0"
 	],
+	"contributors": [
+		"kyle-98"
+	],
 	"contact": {
 		"sources": "https://github.com/sublimeS0/radon-chat"
 	},
@@ -14,9 +17,6 @@
 	"icon": "assets/radon-chat/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
-			"com.radonchat.RadonChat"
-		],
 		"client": [
 			"com.radonchat.RadonChatClient"
 		],
@@ -24,13 +24,6 @@
 			"com.radonchat.config.ModMenuIntegration"
 		]
 	},
-	"mixins": [
-		"radon-chat.mixins.json",
-		{
-			"config": "radon-chat.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
 		"fabricloader": ">=0.16.9",
 		"minecraft": "~1.21.1",
