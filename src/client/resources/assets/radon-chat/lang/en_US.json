@@ -1,0 +1,10 @@
+{
+  "text.autoconfig.radon-chat.title": "Radon Chat Settings",
+  "text.autoconfig.radon-chat.option.radonChatSettings.groups": "Groups",
+  "text.autoconfig.radon-chat.option.Group": "Group",
+  "text.autoconfig.radon-chat.option.Group.name": "Name",
+  "text.autoconfig.radon-chat.option.Group.color": "Color",
+  "text.autoconfig.radon-chat.option.Group.players": "Players",
+  "text.autoconfig.radon-chat.option.Player": "Player",
+  "text.autoconfig.radon-chat.option.Player.name": "Player Name"
+}

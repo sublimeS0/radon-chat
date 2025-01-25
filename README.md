@@ -8,4 +8,8 @@ Find the release corresponding to your game version and copy into `mods` folder.
 
 ## License
 
-This template is available under the GPL 3.0 license.
+This mod is available under the GPL 3.0 license.
+
+## Issues
+
+If any problems or bugs are found, feel free to open an issue. I'll check it out!
